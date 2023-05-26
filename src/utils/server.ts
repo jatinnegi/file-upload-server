@@ -14,7 +14,7 @@ function createServer() {
 
   app.get("/", (_: Request, res: Response) => {
     res.send(
-      `File uploading system: Typescript + Express + Github CI/CD. Hosted with AWS EC2 and Docker`
+      `File uploading system: ${process.env.NODE_ENV.toLowerCase()} mode`
     );
   });
 

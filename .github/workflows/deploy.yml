@@ -47,16 +47,16 @@ jobs:
           docker rmi ${{ steps.inactive-docker-image.outputs.image }}
           docker build . -t ${{ steps.inactive-docker-image.outputs.image }}
       - name: Stop image 1
-        if: steps.inactive-docker-image.outputs.image == 'file-upload-server-2'
+        if: steps.inactive-docker-image.outputs.image == 'file-upload-image-2'
         run: |
           cd /home/ec2-user/file-upload-server
-          docker stop $(docker ps -a -q --filter "ancestor=file-upload-server-1")
-          docker run -d -p 1337:1337 --env-file .env --restart=always file-upload-server-2
-          echo "file-upload-server-1" > ~/.docker-server.txt
+          docker stop $(docker ps -a -q --filter "ancestor=file-upload-image-1")
+          docker run -d -p 1337:1337 --env-file .env --restart=always file-upload-image-2
+          echo "file-upload-image-1" > ~/.docker-server.txt
       - name: Stop image 2
         if: steps.inactive-docker-image.outputs.image == 'file-upload-server-1'
         run: |
           cd /home/ec2-user/file-upload-server
-          docker stop $(docker ps -a -q --filter "ancestor=file-upload-server-2")
-          docker run -d -p 1337:1337 --env-file .env --restart=always file-upload-server-1
-          echo "file-upload-server-2" > ~/.docker-server.txt
+          docker stop $(docker ps -a -q --filter "ancestor=file-upload-image-2")
+          docker run -d -p 1337:1337 --env-file .env --restart=always file-upload-image-1
+          echo "file-upload-image-2" > ~/.docker-server.txt
