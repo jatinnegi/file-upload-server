@@ -1,0 +1,62 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache and install dependencies
+        uses: ./.github/actions/cache-node-deps
+      - name: Restore env file
+        uses: ./.github/actions/restore-file
+        with:
+          decoded_token: ${{ secrets.ENV_FILE_DECODED }}
+          filename: ".env"
+      - name: Run test
+        run: yarn run test
+
+  Build:
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache and install dependencies
+        uses: ./.github/actions/cache-node-deps
+      - name: Run build
+        run: yarn run build
+
+  Deploy:
+    needs: Build
+    runs-on:
+      - self-hosted
+      - ec2-instance
+    steps:
+      - name: Get inactive docker image
+        id: inactive-docker-image
+        run: echo "image=$(cat ~/.docker-server.txt)" >> $GITHUB_OUTPUT
+      - name: Build docker image
+        run: |
+          cd /home/ec2-user/file-upload-server
+          git pull origin main
+          docker rm $(docker ps -a -q --filter "ancestor=${{ steps.inactive-docker-image.outputs.image }}")
+          docker rmi ${{ steps.inactive-docker-image.outputs.image }}
+          docker build . -t ${{ steps.inactive-docker-image.outputs.image }}
+      - name: Stop image 1
+        if: steps.inactive-docker-image.outputs.image == 'file-upload-server-2'
+        run: |
+          cd /home/ec2-user/file-upload-server
+          docker stop $(docker ps -a -q --filter "ancestor=file-upload-server-1")
+          docker run -d -p 1337:1337 --env-file .env --restart=always file-upload-server-2
+          echo "file-upload-server-1" > ~/.docker-server.txt
+      - name: Stop image 2
+        if: steps.inactive-docker-image.outputs.image == 'file-upload-server-1'
+        run: |
+          cd /home/ec2-user/file-upload-server
+          docker stop $(docker ps -a -q --filter "ancestor=file-upload-server-2")
+          docker run -d -p 1337:1337 --env-file .env --restart=always file-upload-server-1
+          echo "file-upload-server-2" > ~/.docker-server.txt

@@ -1,0 +1,13 @@
+name: "Restore file"
+description: "Restore from base64"
+inputs:
+  decoded_token:
+    required: true
+  filename:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Restore file
+      run: echo ${{ inputs.decoded_token }} | base64 --decode > ${{ inputs.filename }}
+      shell: bash
