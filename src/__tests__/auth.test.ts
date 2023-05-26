@@ -18,7 +18,7 @@ describe("auth test suite", () => {
     describe("with no body", () => {
       it("should return 400 status", async () => {
         await supertest(app)
-          .post("/api/auth/sign-up")
+          .post("/auth/sign-up")
           .expect(StatusCodes.BAD_REQUEST);
       });
     });
@@ -28,9 +28,7 @@ describe("auth test suite", () => {
         const {
           statusCode,
           body: { error },
-        } = await supertest(app)
-          .post("/api/auth/sign-up")
-          .send({ email: "john" });
+        } = await supertest(app).post("/auth/sign-up").send({ email: "john" });
 
         expect(statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(error).toBeTruthy();
@@ -44,7 +42,7 @@ describe("auth test suite", () => {
           statusCode,
           body: { error },
         } = await supertest(app)
-          .post("/api/auth/sign-up")
+          .post("/auth/sign-up")
           .send({ password: "hello123", confirmPassword: "hello" });
 
         expect(statusCode).toBe(StatusCodes.BAD_REQUEST);
@@ -62,13 +60,11 @@ describe("auth test suite", () => {
           _id: objectId,
         });
 
-        const { statusCode } = await supertest(app)
-          .post("/api/auth/sign-up")
-          .send({
-            email: "john@example.com",
-            password: "hello123",
-            confirmPassword: "hello123",
-          });
+        const { statusCode } = await supertest(app).post("/auth/sign-up").send({
+          email: "john@example.com",
+          password: "hello123",
+          confirmPassword: "hello123",
+        });
 
         expect(statusCode).toBe(StatusCodes.CONFLICT);
         expect(isUserExistServiceMock).toBeCalledWith("john@example.com");
@@ -87,7 +83,7 @@ describe("auth test suite", () => {
         const {
           statusCode,
           body: { data },
-        } = await supertest(app).post("/api/auth/sign-up").send({
+        } = await supertest(app).post("/auth/sign-up").send({
           email: "john@example.com",
           password: "hello123",
           confirmPassword: "hello123",

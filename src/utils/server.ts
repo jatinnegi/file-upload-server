@@ -27,11 +27,10 @@ function createServer() {
     express.json({ limit: "10mb" }),
     express.urlencoded({ limit: "10mb", extended: true }),
     corsMiddleware,
-    authMiddleware
+    authMiddleware,
+    router,
+    notFoundMiddleware
   );
-
-  app.use("/api", router);
-  app.use(notFoundMiddleware);
 
   return app;
 }
