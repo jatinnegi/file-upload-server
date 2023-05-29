@@ -16,8 +16,7 @@ export declare global {
       REDIS_TOKEN_EXPIRATION: number;
       JWT_SECRET: string;
       JWT_EXPIRATION: string;
-      MAIL_HOST: string;
-      MAIL_PORT: string;
+      MAIL_SERVICE: string;
       MAIL_USER: string;
       MAIL_PASSWORD: string;
       MAIL_TPL_PATH: string;

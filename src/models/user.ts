@@ -34,4 +34,6 @@ schema.methods.toJSON = function () {
   return obj;
 };
 
+export type UserDocument = IUser;
+
 export const User = model<IUser, UserModel>("User", schema);

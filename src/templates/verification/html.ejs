@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+
+      .container {
+        width: 80%;
+        max-width: 450px;
+        margin: 20px auto;
+        text-align: center;
+      }
+
+      .heading {
+        font-size: 20px;
+      }
+
+      .cta-button {
+        display: block;
+        margin: 20px 0;
+        background: rgb(34, 130, 194);
+        color: #fff !important;
+        text-decoration: none;
+        padding: 15px 0px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+
+      .desc-heading {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .desc-text {
+        font-size: 12px;
+        line-height: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="container">
+        <p class="heading">Welcome to File Upload System.</p>
+        <a
+          href="<%=`${clientUrl}/verification/${accessToken}`%>"
+          class="cta-button"
+          >Verify <%=`${email}`%></a
+        >
+        <div class="description">
+          <p class="desc-heading">Why verify?</p>
+          <p class="desc-text">
+            We require an email verification to prevent spamming.
+          </p>
+          <p class="desc-text">Verify your email to get started.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

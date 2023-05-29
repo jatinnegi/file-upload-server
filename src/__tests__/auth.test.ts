@@ -1,13 +1,31 @@
 import { StatusCodes } from "http-status-codes";
+import mongoose from "mongoose";
 import supertest from "supertest";
 import app from "@/utils/server";
-import { userService } from "@/services/userService";
-import mongoose from "mongoose";
+import { userService, verificationService } from "@/services";
+import { UserMail } from "@/mailer";
+// import { User as UserModel, Verification as VerificationModel } from "@/models";
 
 describe("auth test suite", () => {
-  const objectId = new mongoose.Types.ObjectId();
+  const objectId1 = new mongoose.Types.ObjectId();
+  const objectId2 = new mongoose.Types.ObjectId();
+
   const isUserExistServiceMock = jest.spyOn(userService, "isExistByEmail");
   const createUserServiceMock = jest.spyOn(userService, "create");
+  const addVerificationToUserMock = jest.spyOn(
+    userService,
+    "addVerificationToUser"
+  );
+  const createVerificationServiceMock = jest.spyOn(
+    verificationService,
+    "create"
+  );
+  const sendVerificationMailMock = jest.spyOn(
+    UserMail.prototype,
+    "verification"
+  );
+  // const userSaveMock = jest.spyOn(UserModel.prototype, "save");
+  // const verificationSaveMock = jest.spyOn(VerificationModel.prototype, "save");
 
   afterAll(() => {
     jest.clearAllMocks();
@@ -57,7 +75,7 @@ describe("auth test suite", () => {
     describe("with duplicate email", () => {
       it("should return 409", async () => {
         isUserExistServiceMock.mockResolvedValueOnce({
-          _id: objectId,
+          _id: objectId1,
         });
 
         const { statusCode } = await supertest(app).post("/auth/sign-up").send({
@@ -76,9 +94,22 @@ describe("auth test suite", () => {
         isUserExistServiceMock.mockResolvedValueOnce(null);
         createUserServiceMock
           // @ts-ignore
-          .mockResolvedValueOnce({
-            id: objectId,
+          .mockReturnValueOnce({
+            id: objectId1,
+            save: jest.fn(),
           });
+        createVerificationServiceMock
+          // @ts-ignore
+          .mockReturnValueOnce({
+            id: objectId2,
+            save: jest.fn(),
+          });
+
+        sendVerificationMailMock.mockResolvedValueOnce();
+        addVerificationToUserMock.mockResolvedValueOnce();
+
+        // userSaveMock.mockResolvedValueOnce({});
+        // verificationSaveMock.mockResolvedValueOnce({});
 
         const {
           statusCode,
@@ -90,6 +121,10 @@ describe("auth test suite", () => {
         });
 
         expect(statusCode).toBe(StatusCodes.OK);
+        expect(addVerificationToUserMock).toBeCalledWith({
+          user: expect.any(Object),
+          verificationId: objectId2,
+        });
         expect(data).toBeTruthy();
         expect(data).toHaveProperty("accessToken", expect.any(String));
       });

@@ -2,11 +2,17 @@ import { Response } from "express";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import winston from "winston";
 
+import { ExpiresInDays } from "@/constants";
 import { SignInPayload, SignUpPayload } from "@/contracts/auth";
-import { userService } from "@/services";
+
+import { userService, verificationService } from "@/services";
+import { UserMail } from "@/mailer";
+
 import { IBodyRequest } from "@/contracts/request";
 import { createHash } from "@/utils/hash";
 import { jwtSign } from "@/utils/jwt";
+import { createCryptoString } from "@/utils/cryptoString";
+import { createDateAddDaysFromNow } from "@/utils/dates";
 
 export const authController = {
   signIn: async (
@@ -56,12 +62,36 @@ export const authController = {
 
       const hashedPassword = await createHash(password);
 
-      const user = await userService.create({
+      const user = userService.create({
         email,
         password: hashedPassword,
       });
 
+      const cryptoString = createCryptoString();
+
+      const dateFromNow = createDateAddDaysFromNow(ExpiresInDays.Verification);
+
+      const verification = verificationService.create({
+        userId: user.id,
+        email: user.email,
+        accessToken: cryptoString,
+        expiresIn: dateFromNow,
+      });
+
+      userService.addVerificationToUser({
+        user,
+        verificationId: verification.id,
+      });
+
       const { accessToken } = jwtSign(user.id);
+
+      const userMail = new UserMail();
+
+      // userMail.signUp({ email: user.email });
+      userMail.verification({ email, accessToken });
+
+      await user.save();
+      await verification.save();
 
       return res.status(StatusCodes.OK).json({
         data: { accessToken },
@@ -69,6 +99,7 @@ export const authController = {
         status: StatusCodes.OK,
       });
     } catch (error) {
+      console.log(error);
       winston.error(error);
 
       return res.status(StatusCodes.BAD_REQUEST).json({

@@ -1,5 +1,12 @@
 import { Model, ObjectId } from "mongoose";
 
+export interface IVerification {
+  email: string;
+  accessToken: string;
+  expiresIn: Date;
+  user: ObjectId;
+}
+
 export interface IUser {
   id: ObjectId;
   email: string;
