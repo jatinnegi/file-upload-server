@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development ts-node --files -r tsconfig-paths/register ./src",
     "watch": "cross-env ts-node-dev --files --respawn --inspect -r tsconfig-paths/register ./src",
-    "build": "cross-env NODE_ENV=production tsc && tsc-alias",
+    "build": "cross-env NODE_ENV=production tsc && tsc-alias && npm run copy:files",
+    "copy:files": "cp -R ./src/templates ./dist",
     "lint": "eslint --debug ./src",
     "test": "jest --detectOpenHandles"
   },
