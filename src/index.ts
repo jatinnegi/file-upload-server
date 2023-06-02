@@ -1,5 +1,3 @@
-import "dotenv/config";
-import "@/infrastructure/logger";
 import { mongoose, redis } from "@/dataSources";
 import app from "@/utils/server";
 

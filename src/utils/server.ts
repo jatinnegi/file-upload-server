@@ -1,4 +1,6 @@
 import express, { Express, Request, Response } from "express";
+import "dotenv/config";
+import "@/infrastructure/logger";
 
 import {
   corsMiddleware,
