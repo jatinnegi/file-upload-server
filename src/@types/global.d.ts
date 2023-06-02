@@ -13,6 +13,8 @@ export declare global {
       CLIENT_URL: string;
       MONGODB_URI: string;
       REDIS_URI: string;
+      REDIS_PASSWORD: string;
+      REDIS_PORT: number;
       REDIS_TOKEN_EXPIRATION: number;
       JWT_SECRET: string;
       JWT_EXPIRATION: string;

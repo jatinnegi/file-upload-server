@@ -8,14 +8,19 @@ class Redis {
   public client: RedisClientType;
 
   constructor(redisUri: string) {
-    console.log(redisUri);
     this.redisUri = redisUri;
     this.createClient();
   }
 
   private createClient() {
     try {
-      this.client = createClient({ url: this.redisUri });
+      this.client = createClient({
+        password: process.env.REDIS_PASSWORD,
+        socket: {
+          host: process.env.REDIS_URI,
+          port: process.env.REDIS_PORT,
+        },
+      });
     } catch (error) {
       winston.error(error);
     }
