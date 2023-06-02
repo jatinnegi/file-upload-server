@@ -113,4 +113,92 @@ export const authValidation = {
       });
     }
   },
+
+  resetPassword: (
+    req: IBodyRequest<ResetPasswordPayload>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const schema = joi.object({
+        email: joi
+          .string()
+          .email({ tlds: { allow: true } })
+          .required()
+          .messages({
+            "any.required": "Email is required",
+            "string.empty": "Email is required",
+            "string.email": "Enter a valid email",
+          }),
+      });
+
+      const { value, error: validationErrors } = schema.validate(req.body, {
+        abortEarly: false,
+      });
+
+      if (validationErrors)
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          error: cleanErrors(validationErrors),
+          message: ReasonPhrases.BAD_REQUEST,
+          status: StatusCodes.BAD_REQUEST,
+        });
+
+      Object.assign(req.body, value);
+
+      next();
+    } catch (error) {
+      winston.error(error);
+
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: ReasonPhrases.BAD_REQUEST,
+        status: StatusCodes.BAD_REQUEST,
+      });
+    }
+  },
+
+  newPassword: (
+    req: IBodyRequest<NewPasswordPayload>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const schema = joi.object({
+        password: joi.string().min(6).required().messages({
+          "any.required": "Password is required",
+          "string.empty": "Password is required",
+          "string.min": "Password should be atleast 6 characters long",
+        }),
+        confirmPassword: joi
+          .any()
+          .valid(joi.ref("password"))
+          .required()
+          .messages({
+            "any.required": "Passwords don't match",
+            "any.only": "Passwords don't match",
+          }),
+      });
+
+      const { value, error: validationErrors } = schema.validate(req.body, {
+        abortEarly: false,
+      });
+
+      if (validationErrors)
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          error: cleanErrors(validationErrors),
+          message: ReasonPhrases.BAD_REQUEST,
+          status: StatusCodes.BAD_REQUEST,
+        });
+
+      Object.assign(req.body, value);
+
+      next();
+    } catch (error) {
+      winston.error(error);
+
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: ReasonPhrases.BAD_REQUEST,
+        status: StatusCodes.BAD_REQUEST,
+      });
+    }
+  },
 };

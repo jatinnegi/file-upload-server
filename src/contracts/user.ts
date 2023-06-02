@@ -7,6 +7,12 @@ export interface IVerification {
   user: ObjectId;
 }
 
+export interface IResetPassword {
+  accessToken: string;
+  expiresIn: Date;
+  user: ObjectId;
+}
+
 export interface IUser {
   id: ObjectId;
   email: string;

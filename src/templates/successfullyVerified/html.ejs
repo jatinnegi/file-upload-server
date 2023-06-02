@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .main {
+        width: 80%;
+        max-width: 450px;
+        margin: 20px auto;
+        text-align: center;
+      }
+
+      .heading {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .icon-container {
+        margin: 20px 0px;
+        display: inline-block;
+        height: 100px;
+        width: 100px;
+      }
+
+      .description-heading {
+        font-weight: 600;
+        font-size: 14px;
+        margin: 15px 0px;
+      }
+      .description-text {
+        font-size: 14px;
+        line-height: 1.2rem;
+      }
+
+      .cta-button {
+        display: block;
+        margin: 20px 0;
+        background: rgb(34, 130, 194);
+        color: #fff !important;
+        text-decoration: none;
+        padding: 15px 0px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <p class="heading">Account Activated</p>
+      <div class="icon-container">
+        <img
+          src="https://store.suitecrm.com/assets/img/addons/bv-email-verify/logo.png"
+          alt="verified-email"
+          style="width: 100%"
+        />
+      </div>
+      <div class="description">
+        <p class="description-heading">Hello <%=`${email}`%>,</p>
+        <p class="description-text">
+          Your email has been verified. Your account is now active.
+        </p>
+        <p class="description-text">
+          Please use this link below to login to your account.
+        </p>
+        <a href="<%=`${clientUrl}/get-started`%>" class="cta-button"
+          >Login to your account</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

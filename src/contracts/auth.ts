@@ -9,4 +9,6 @@ export interface SignUpPayload extends Pick<IUser, "email" | "password"> {
 
 export type ResetPasswordPayload = Pick<IUser, "email">;
 
-export type NewPasswordPayload = Pick<IUser, "password">;
+export interface NewPasswordPayload extends Pick<IUser, "password"> {
+  confirmPassword: string;
+}

@@ -17,4 +17,20 @@ export const auth = (router: Router) => {
     authValidation.signUp,
     authController.signUp
   );
+
+  router.get("/auth/sign-out", authGuards.isAuth, authController.signOut);
+
+  router.post(
+    "/auth/password/reset",
+    authGuards.isGuest,
+    authValidation.resetPassword,
+    authController.resetPassword
+  );
+
+  router.post(
+    "/auth/password/new/:accessToken",
+    authGuards.isGuest,
+    authValidation.newPassword,
+    authController.newPassword
+  );
 };

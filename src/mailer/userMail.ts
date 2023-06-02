@@ -15,7 +15,6 @@ export class UserMail extends Mailer {
         },
       });
     } catch (error) {
-      console.log(error);
       winston.error(error);
     }
   }
@@ -42,7 +41,63 @@ export class UserMail extends Mailer {
         },
       });
     } catch (error) {
-      console.log(error);
+      winston.error(error);
+    }
+  }
+
+  public async successfullyVerified({ email }: { email: string }) {
+    try {
+      this.mailer.send({
+        template: "successfullyVerified",
+        message: {
+          to: email,
+          from: `"Successfully verified" ${mailUser}`,
+          subject: "Successfully verified",
+        },
+        locals: { email, clientUrl: "http://localhost:3000" },
+      });
+    } catch (error) {
+      winston.error(error);
+    }
+  }
+
+  public async resetPassword({
+    email,
+    accessToken,
+  }: {
+    email: string;
+    accessToken: string;
+  }) {
+    try {
+      await this.mailer.send({
+        template: "resetPassword",
+        message: {
+          to: email,
+          from: `"Reset Password" ${mailUser}`,
+          subject: "Reset Password",
+        },
+        locals: {
+          clientUrl: "http://localhost:3000",
+          accessToken,
+        },
+      });
+    } catch (error) {
+      winston.error(error);
+    }
+  }
+
+  public async successfullyUpdatedPassword({ email }: { email: string }) {
+    try {
+      await this.mailer.send({
+        template: "successfullyUpdatedPassword",
+        message: {
+          to: email,
+          from: `"Password reset successfull" ${mailUser}`,
+          subject: "Password Reset Successfull",
+        },
+        locals: { email, clientUrl: "http://localhost:3000" },
+      });
+    } catch (error) {
       winston.error(error);
     }
   }

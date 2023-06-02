@@ -10,3 +10,7 @@ export const jwtSign = (id: ObjectId): IAccessToken => {
 
   return { accessToken };
 };
+
+export const jwtVerify = ({ accessToken }: { accessToken: string }) => {
+  return jwt.verify(accessToken, process.env.JWT_SECRET) as IJwtUser;
+};
