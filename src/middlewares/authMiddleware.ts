@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { ObjectId } from "mongoose";
 import winston from "winston";
 
 import { getAccessTokenFromHeaders } from "@/utils/headers";
