@@ -8,6 +8,7 @@ class Redis {
   public client: RedisClientType;
 
   constructor(redisUri: string) {
+    console.log(redisUri);
     this.redisUri = redisUri;
     this.createClient();
   }

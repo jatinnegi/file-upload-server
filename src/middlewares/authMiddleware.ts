@@ -23,6 +23,7 @@ export const authMiddleware = async (
     const isAccessTokenExpired = await redis.client.get(
       `expiredToken:${accessToken}`
     );
+    console.log(isAccessTokenExpired);
 
     if (isAccessTokenExpired) return next();
 
