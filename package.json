@@ -8,7 +8,7 @@
     "watch": "cross-env ts-node-dev --files --respawn --inspect -r tsconfig-paths/register ./src",
     "build": "cross-env NODE_ENV=production tsc && tsc-alias && npm run copy:files && npm run copy:storage",
     "copy:files": "cp -R ./src/templates ./dist",
-    "copy:storage:": "cp -R ./storage ./dist",
+    "copy:storage": "cp -R ./storage ./dist",
     "lint": "eslint --debug ./src",
     "test": "jest --detectOpenHandles"
   },
