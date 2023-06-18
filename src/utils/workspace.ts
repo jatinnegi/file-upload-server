@@ -18,7 +18,7 @@ export const getWorkspace = async (
   const contents = fs.readdirSync(targetPath);
 
   for (let i = 0; i < contents.length; i++) {
-    const path = `${targetPath}\\${contents[i]}`;
+    const path = `${targetPath}/${contents[i]}`;
     const stats = fs.lstatSync(path);
 
     if (stats.isDirectory()) {
