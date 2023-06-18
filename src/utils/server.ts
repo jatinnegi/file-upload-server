@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import fileUpload from "express-fileupload";
 import "dotenv/config";
 import "@/infrastructure/logger";
 
@@ -26,6 +27,7 @@ function createServer() {
   app.use(
     express.json({ limit: "10mb" }),
     express.urlencoded({ limit: "10mb", extended: true }),
+    fileUpload(),
     corsMiddleware,
     authMiddleware,
     router,

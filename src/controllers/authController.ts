@@ -83,31 +83,31 @@ export const authController = {
         password: hashedPassword,
       });
 
-      const cryptoString = createCryptoString();
+      // const cryptoString = createCryptoString();
 
-      const dateFromNow = createDateAddDaysFromNow(ExpiresInDays.Verification);
+      // const dateFromNow = createDateAddDaysFromNow(ExpiresInDays.Verification);
 
-      const verification = verificationService.create({
-        userId: user.id,
-        email: user.email,
-        accessToken: cryptoString,
-        expiresIn: dateFromNow,
-      });
+      // const verification = verificationService.create({
+      //   userId: user.id,
+      //   email: user.email,
+      //   accessToken: cryptoString,
+      //   expiresIn: dateFromNow,
+      // });
 
-      userService.addVerificationToUser({
-        user,
-        verificationId: verification.id,
-      });
+      // userService.addVerificationToUser({
+      //   user,
+      //   verificationId: verification.id,
+      // });
 
       const { accessToken } = jwtSign(user.id);
 
-      const userMail = new UserMail();
+      // const userMail = new UserMail();
 
       // userMail.signUp({ email: user.email });
-      userMail.verification({ email, accessToken: cryptoString });
+      // userMail.verification({ email, accessToken: cryptoString });
 
       await user.save();
-      await verification.save();
+      // await verification.save();
 
       return res.status(StatusCodes.OK).json({
         data: { accessToken },
