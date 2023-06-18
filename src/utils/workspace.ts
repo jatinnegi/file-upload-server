@@ -15,7 +15,6 @@ export const getWorkspace = async (
   folders: WorkspaceProps[],
   files: WorkspaceProps[]
 ) => {
-  console.log("getting contents");
   const contents = fs.readdirSync(targetPath);
 
   for (let i = 0; i < contents.length; i++) {

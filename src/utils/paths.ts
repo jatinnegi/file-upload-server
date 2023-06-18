@@ -15,7 +15,7 @@ export const getStoragePath = () => {
 
   const filePath = dirname(filename).slice(0, -4);
 
-  return `${filePath}\\storage\\public`;
+  return `${filePath}/storage/public`;
 };
 
 export const getPreviewPath = () => {
@@ -25,5 +25,5 @@ export const getPreviewPath = () => {
 
   const filePath = dirname(filename).slice(0, -4);
 
-  return `${filePath}\\storage\\public\\previews`;
+  return `${filePath}/storage/public/previews`;
 };

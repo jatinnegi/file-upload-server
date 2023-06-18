@@ -26,10 +26,10 @@ export const filesController = {
     try {
       let { path } = req.body;
 
-      path = path.replace(/\//g, "\\");
+      // path = path.replace(/\//g, "/");
 
-      const targetPath = `${getStoragePath()}\\${userId}${path}`;
-      // const targetPath = `${getStoragePath()}\\user-123${path}`;
+      const targetPath = `${getStoragePath()}/${userId}${path}`;
+      // const targetPath = `${getStoragePath()}/user-123${path}`;
 
       if (!fs.existsSync(targetPath)) {
         fs.mkdirSync(targetPath);
@@ -46,9 +46,6 @@ export const filesController = {
 
       await getWorkspace(targetPath, folders, files);
 
-      console.log(folders);
-      console.log(files);
-
       return res.status(StatusCodes.OK).json({
         folders,
         files,
@@ -59,6 +56,7 @@ export const filesController = {
       winston.error(error);
     }
   },
+
   upload: (
     req: IQueryRequest<{ workspace: string; overwrite: string }>,
     res: Response
@@ -71,7 +69,7 @@ export const filesController = {
         : false;
 
       const workspacePath = req.query.workspace
-        .replace(/#/g, "\\")
+        .replace(/#/g, "/")
         .replace(/%20/g, " ")
         .replace(/%40/g, "@");
 
@@ -89,8 +87,8 @@ export const filesController = {
 
       const storagePath =
         workspacePath === ""
-          ? `${getStoragePath()}\\${userId}`
-          : `${getStoragePath()}\\${userId}\\${workspacePath}`;
+          ? `${getStoragePath()}/${userId}`
+          : `${getStoragePath()}/${userId}/${workspacePath}`;
       if (!fs.existsSync(storagePath)) fs.mkdirSync(storagePath);
 
       const files: any = req.files;
@@ -108,7 +106,7 @@ export const filesController = {
         path.reverse();
 
         const firstCheck: string = path[path.length - 1];
-        const firstCheckPath: string = `${storagePath}\\${
+        const firstCheckPath: string = `${storagePath}/${
           path[path.length - 1]
         }`;
 
@@ -130,7 +128,7 @@ export const filesController = {
         function recursive(fileName: string | undefined, pathStr: string) {
           if (!fileName) return;
 
-          const filePath = `${pathStr}\\${fileName}`;
+          const filePath = `${pathStr}/${fileName}`;
 
           if (path.length === 0) {
             uploaded++;
@@ -185,15 +183,15 @@ export const filesController = {
     try {
       if (!oldName || !newName) throw new Error("Invalid request body");
 
-      const storagePath = `${getStoragePath()}\\${userId}`;
+      const storagePath = `${getStoragePath()}/${userId}`;
       const targetPath =
         path.trim() === ""
-          ? `${storagePath}\\${oldName}`
-          : `${storagePath}\\${path}\\${oldName}`;
+          ? `${storagePath}/${oldName}`
+          : `${storagePath}/${path}/${oldName}`;
       const newPath =
         path.trim() === ""
-          ? `${storagePath}\\${newName}`
-          : `${storagePath}\\${path}\\${newName}`;
+          ? `${storagePath}/${newName}`
+          : `${storagePath}/${path}/${newName}`;
 
       if (fs.existsSync(newPath))
         return res.status(StatusCodes.CONFLICT).json({
@@ -227,12 +225,12 @@ export const filesController = {
       if (!target || typeof isFolder === "undefined")
         throw new Error("Invalid body");
 
-      const storagePath = `${getStoragePath()}\\${userId}`;
-      const targetPath = `${storagePath}\\${target}`;
+      const storagePath = `${getStoragePath()}/${userId}`;
+      const targetPath = `${storagePath}/${target}`;
       let previewPath = "";
 
       if (isFolder) {
-        previewPath = `${getStoragePath()}\\previews\\download.zip`;
+        previewPath = `${getStoragePath()}/previews/download.zip`;
         await zip(targetPath, previewPath);
       } else previewPath = targetPath;
 
@@ -256,8 +254,8 @@ export const filesController = {
       if (!target || typeof isFolder === "undefined")
         throw new Error("Invalid body");
 
-      const storagePath = `${getStoragePath()}\\${userId}`;
-      const targetPath = `${storagePath}\\${target}`;
+      const storagePath = `${getStoragePath()}/${userId}`;
+      const targetPath = `${storagePath}/${target}`;
 
       if (!fs.existsSync(targetPath))
         return res.status(StatusCodes.OK).json({
@@ -291,7 +289,7 @@ export const filesController = {
     try {
       if (!path) throw new Error("Invalid body");
 
-      const storagePath = `${getStoragePath()}\\${userId}`;
+      const storagePath = `${getStoragePath()}/${userId}`;
       const targetPath = `${storagePath}${path}`;
 
       if (fs.existsSync(targetPath))
