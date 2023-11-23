@@ -1,0 +1,4 @@
+{"expiredAt":"2023-11-23T09:54:36.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError","timestamp":"2023-11-23 15:26:41"}
+{"expiredAt":"2023-11-23T09:54:36.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError","timestamp":"2023-11-23 15:26:44"}
+{"expiredAt":"2023-11-23T09:54:36.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError","timestamp":"2023-11-23 15:28:06"}
+{"expiredAt":"2023-11-23T09:54:36.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError","timestamp":"2023-11-23 15:28:23"}
